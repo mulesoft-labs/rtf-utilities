@@ -49,6 +49,14 @@ function load_environment {
     fi
 }
 
+function check_nc() {
+    set +e
+    rpm -q nc
+    if [ $? != 0 ]; then
+        echo "Installing ncat..."
+        yum install -q -y nc || true
+    fi
+}
 
 function check_ntp() {
     #disable exit-on-error
@@ -56,7 +64,7 @@ function check_ntp() {
     rpm -q chrony
     if [ $? != 0 ]; then
         echo "Installing chrony..."
-        yum install -y chrony || true
+        yum install -q -y chrony || true
     fi
 
     printf "Checking chrony sync status..."
@@ -83,6 +91,7 @@ function check_ntp() {
 
 echo -e "Testing connetivities..."
 load_environment
+check_nc
 check_ntp
 
 set +e
