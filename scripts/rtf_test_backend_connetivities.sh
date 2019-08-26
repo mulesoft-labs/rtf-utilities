@@ -89,7 +89,7 @@ function check_ntp() {
 }
 
 
-echo -e "Testing connetivities..."
+echo -e "Testing connectivities..."
 load_environment
 check_nc
 check_ntp
