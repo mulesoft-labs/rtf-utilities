@@ -1,4 +1,4 @@
-# RTF utilies
+# RTF utilities
 
 ## scripts
 
