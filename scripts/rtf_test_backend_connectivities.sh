@@ -51,10 +51,11 @@ function load_environment {
 
 function check_nc() {
     set +e
-    rpm -q nc
-    if [ $? != 0 ]; then
+    if ! [ -x "$(command -v nca1)" ]; then
+        set -e
         echo "Installing ncat..."
-        yum install -q -y nc || true
+        yum install -q -y nc
+        set +e
     fi
 }
 
