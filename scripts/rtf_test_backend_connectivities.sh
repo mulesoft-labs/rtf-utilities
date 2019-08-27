@@ -51,7 +51,7 @@ function load_environment {
 
 function check_nc() {
     set +e
-    if ! [ -x "$(command -v nca1)" ]; then
+    if ! [ -x "$(command -v nc)" ]; then
         set -e
         echo "Installing ncat..."
         yum install -q -y nc
