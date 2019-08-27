@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="e7eb9868-3b92-4ef1-9be5-d5a2b5c23c3d" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="e72e8949-a6c3-4b4d-b5c1-d23f59065465" basePath="api" >
+		<http:request-connection protocol="HTTPS" host="randomuser.me" port="443" />
+	</http:request-config>
+	<flow name="rtf-meetup-demoFlow" doc:id="98d6ffd5-a22a-4410-9a6b-70dbf703bdce" >
+		<http:listener doc:name="Listener" doc:id="e0bca378-1433-485c-a8dc-c75a248e7cd2" config-ref="HTTP_Listener_config" path="/status"/>
+		<http:request method="GET" doc:name="Request" doc:id="03a0d0b0-5852-46b5-a68c-bc45c78cd52f" config-ref="HTTP_Request_configuration" path="/"/>
+		<ee:transform doc:name="Transform Message" doc:id="8f3ecf5a-faf1-4af0-8cdf-8655f26ff572" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+
+{
+  formattedTime: now() as String {format: "y-MM-dd hh:mm:ss"},
+  status: "healthy",
+  payload: payload
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="rtf-meetup-demoFlow1" doc:id="52c3a5cc-b1e1-4c32-9a71-2f32bddf5762" >
+		<http:listener doc:name="Listener" doc:id="2aa9579f-ff62-4a18-bde1-21bdf88f4da3" config-ref="HTTP_Listener_config" path="/health"/>
+		<set-payload value="Ok" doc:name="Set Payload" doc:id="240769da-eb91-4c7b-90e0-8aad9ceeef0f" />
+	</flow>
+</mule>
