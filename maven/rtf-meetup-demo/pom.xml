@@ -1,74 +1,70 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-
-	<groupId>b2ee7923-e6c7-4ca3-86a0-6304559b935d</groupId>
-	<artifactId>rtf-meetup-demo</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>b2ee7923-e6c7-4ca3-86a0-6304559b935d</groupId>
+    <artifactId>rtf-meetup-demo</artifactId>
     <version>1.0.2</version>
     <packaging>mule-application</packaging>
-
-	<name>rtf-meetup-demo</name>
-
+    <name>rtf-meetup-demo</name>
     <properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<app.runtime>4.2.1</app.runtime>
-	    <mule.maven.plugin.version>3.2.7</mule.maven.plugin.version>
-		
-		<anypoint.uri>https://anypoint.mulesoft.com</anypoint.uri>
-		<anypoint.provider>MC</anypoint.provider>
-		<deployment.environment>Production</deployment.environment>
-		<deployment.target>rtf-meetup</deployment.target>
-		<app.name>rtf-meetup-demo</app.name>
-		<app.cores>70m</app.cores>
-		<app.memory>500Mi</app.memory>
-		<deployment.replica>1</deployment.replica>
-		<maven.server>Repository</maven.server>
-	</properties>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.mule.tools.maven</groupId>
-				<artifactId>mule-maven-plugin</artifactId>
-				<version>${mule.maven.plugin.version}</version>
-				<extensions>true</extensions>
-            		<configuration>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <app.runtime>4.2.1</app.runtime>
+        <mule.maven.plugin.version>3.2.7</mule.maven.plugin.version>
+        <anypoint.uri>https://anypoint.mulesoft.com</anypoint.uri>
+        <anypoint.provider>MC</anypoint.provider>
+        <deployment.environment>Production</deployment.environment>
+        <deployment.target>rtf-meetup</deployment.target>
+        <app.name>rtf-meetup-demo</app.name>
+        <app.cores>70m</app.cores>
+        <app.memory>500Mi</app.memory>
+        <deployment.replica>1</deployment.replica>
+        <maven.server>Repository</maven.server>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.mule.tools.maven</groupId>
+                <artifactId>mule-maven-plugin</artifactId>
+                <version>${mule.maven.plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
                     <runtimeFabricDeployment>
-						<uri>${anypoint.uri}</uri>
-						<provider>${anypoint.provider}</provider>
-						<environment>${deployment.environment}</environment>
-						<target>${deployment.target}</target>
-						<muleVersion>${app.runtime}</muleVersion>
-						<server>${maven.server}</server>
-						<applicationName>${app.name}</applicationName>
-						<username>${username}</username>
-			            <password>${password}</password>
-			            <properties>
-							<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
-							<anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
-							<http.nonProxyHosts>localhost</http.nonProxyHosts>
-							<http.proxyHost>172.19.0.23</http.proxyHost>
-							<http.proxyPort>3128</http.proxyPort>
-							<https.proxyHost>172.19.0.23</https.proxyHost>
-							<https.proxyPort>3128</https.proxyPort>
-							<java.net.useSystemProxies>false</java.net.useSystemProxies>
-							<com.ning.http.client.AsyncHttpClientConfig.useProxySelector>false</com.ning.http.client.AsyncHttpClientConfig.useProxySelector>
-							<com.ning.http.client.AsyncHttpClientConfig.useProxyProperties>true</com.ning.http.client.AsyncHttpClientConfig.useProxyProperties>					
-						</properties>
-						<deploymentSettings>
-							<replicationFactor>${deployment.replica}</replicationFactor>
-							<cpuReserved>${app.cores}</cpuReserved>
-							<memoryReserved>${app.memory}</memoryReserved>
-							<publicUrl>https://rtf.mulesoft.com/${name}</publicUrl>
-				  		</deploymentSettings>
-					</runtimeFabricDeployment>
-                		<classifier>mule-application</classifier>
+                        <uri>${anypoint.uri}</uri>
+                        <provider>${anypoint.provider}</provider>
+                        <environment>${deployment.environment}</environment>
+                        <target>${deployment.target}</target>
+                        <muleVersion>${app.runtime}</muleVersion>
+                        <server>${maven.server}</server>
+                        <applicationName>${app.name}</applicationName>
+                        <username>${username}</username>
+                        <password>${password}</password>
+                        <properties>
+                            <anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
+                            <anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
+                            <anypoint.platform.client_id>${clientID}</anypoint.platform.client_id>
+                            <anypoint.platform.client_secret>${secretID}</anypoint.platform.client_secret>
+                            <http.nonProxyHosts>localhost</http.nonProxyHosts>
+                            <http.proxyHost>172.19.0.23</http.proxyHost>
+                            <http.proxyPort>3128</http.proxyPort>
+                            <https.proxyHost>172.19.0.23</https.proxyHost>
+                            <https.proxyPort>3128</https.proxyPort>
+                            <java.net.useSystemProxies>false</java.net.useSystemProxies>
+                            <com.ning.http.client.AsyncHttpClientConfig.useProxySelector>false</com.ning.http.client.AsyncHttpClientConfig.useProxySelector>
+                            <com.ning.http.client.AsyncHttpClientConfig.useProxyProperties>true</com.ning.http.client.AsyncHttpClientConfig.useProxyProperties>
+                        </properties>
+                        <deploymentSettings>
+                            <replicationFactor>${deployment.replica}</replicationFactor>
+                            <cpuReserved>${app.cores}</cpuReserved>
+                            <memoryReserved>${app.memory}</memoryReserved>
+                            <publicUrl>https://rtf.mulesoft.com/${name}</publicUrl>
+                        </deploymentSettings>
+                    </runtimeFabricDeployment>
+                    <classifier>mule-application</classifier>
                 </configuration>
-				
-			</plugin>
-		<plugin>
-              	<groupId>org.apache.maven.plugins</groupId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
@@ -78,9 +74,8 @@
                 </configuration>
             </plugin>
         </plugins>
-	</build>
-
-	<dependencies>
+    </build>
+    <dependencies>
         <dependency>
             <groupId>org.mule.connectors</groupId>
             <artifactId>mule-http-connector</artifactId>
@@ -93,16 +88,15 @@
             <version>1.1.5</version>
             <classifier>mule-plugin</classifier>
         </dependency>
-		<dependency>
+        <dependency>
             <groupId>org.mule.module</groupId>
             <artifactId>mule-java-module</artifactId>
             <version>1.2.1</version>
             <classifier>mule-plugin</classifier>
         </dependency>
     </dependencies>
-
-	<repositories>
-          <repository>
+    <repositories>
+        <repository>
             <id>anypoint-exchange</id>
             <name>Anypoint Exchange</name>
             <url>https://maven.anypoint.mulesoft.com/api/v1/maven</url>
@@ -126,14 +120,12 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-    
-   <distributionManagement>
-	    <repository>
-	      <id>${maven.server}</id>
-	      <name>Enablement Repository</name>
-	      <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/${groupId}/maven</url>
-	      <layout>default</layout>
-	    </repository>
-   </distributionManagement>
-
+    <distributionManagement>
+        <repository>
+            <id>${maven.server}</id>
+            <name>Enablement Repository</name>
+            <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/${groupId}/maven</url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
 </project>
