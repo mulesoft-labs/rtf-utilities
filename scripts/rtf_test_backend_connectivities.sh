@@ -109,9 +109,9 @@ else
     echo "HTTP/HTTPS PROXY: $RTF_HTTP_PROXY"
 
     if [ -z $creds ]; then
-        NC_WITH_PROXY="nc --proxy $url --proxy-type http"
+        NC_WITH_PROXY="nc --proxy $proxy --proxy-type http"
     else
-        NC_WITH_PROXY="nc --proxy $url --proxy-type http --proxy-auth $creds"
+        NC_WITH_PROXY="nc --proxy $proxy --proxy-type http --proxy-auth $creds"
     fi
 fi
 
