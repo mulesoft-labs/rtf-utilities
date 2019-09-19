@@ -10,9 +10,6 @@
 
 
 ## maven
-* rtf-meetup-demo (maven deploy in mule4)
 
-```
-mvn deploy # upload to exchange
-mvn deploy -DmuleDeploy # deploy to RTF
-```
+### rtf-meetup-demo (maven deploy in mule4)
+* [How to deploy a Mule 4 application to Runtime Fabric with Maven](https://help.mulesoft.com/s/article/How-to-deploy-a-Mule-4-application-to-Runtime-Fabric-with-Maven)
