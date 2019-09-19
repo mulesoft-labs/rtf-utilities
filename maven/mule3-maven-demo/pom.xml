@@ -1,175 +1,167 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>b2ee7923-e6c7-4ca3-86a0-6304559b935d</groupId>
-	<artifactId>mule3-maven-demo</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>b2ee7923-e6c7-4ca3-86a0-6304559b935d</groupId>
+    <artifactId>mule3-maven-demo</artifactId>
     <version>1.0.10</version>
     <packaging>mule</packaging>
-	<name>mule3-maven-demo</name>
-
+    <name>mule3-maven-demo</name>
     <properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<mule.version>3.9.3</mule.version>
-		<type>app</type> 
-    		<mule.tools.version>1.7</mule.tools.version>
-    		<mule.maven.plugin.version>2.3.3</mule.maven.plugin.version>
-    		
-    		<anypoint.uri>https://anypoint.mulesoft.com</anypoint.uri>
-		<anypoint.provider>MC</anypoint.provider>
-		<deployment.environment>Production</deployment.environment>
-		<deployment.target>rtf-march</deployment.target>
-		<app.name>mule3-maven-demo</app.name>
-		<app.cores>70m</app.cores>
-		<app.memory>500Mi</app.memory>
-		<deployment.replica>1</deployment.replica>
-		<maven.server>Repository</maven.server>
-	</properties>
-
-	<build>
-		<plugins>
- 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-install-plugin</artifactId>
-				<version>2.3.1</version>
-			</plugin>
-			<plugin>
-				<groupId>org.mule.tools.maven</groupId>
-				<artifactId>mule-maven-plugin</artifactId>
-				<version>${mule.maven.plugin.version}</version>
-				<extensions>true</extensions>
-	            <configuration>
-	            		<classifier>application</classifier>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <mule.version>3.9.3</mule.version>
+        <type>app</type>
+        <mule.tools.version>1.7</mule.tools.version>
+        <mule.maven.plugin.version>2.3.3</mule.maven.plugin.version>
+        <anypoint.uri>https://anypoint.mulesoft.com</anypoint.uri>
+        <anypoint.provider>MC</anypoint.provider>
+        <deployment.environment>Production</deployment.environment>
+        <deployment.target>rtf-march</deployment.target>
+        <app.name>mule3-maven-demo</app.name>
+        <app.cores>70m</app.cores>
+        <app.memory>500Mi</app.memory>
+        <deployment.replica>1</deployment.replica>
+        <maven.server>Repository</maven.server>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.3.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.mule.tools.maven</groupId>
+                <artifactId>mule-maven-plugin</artifactId>
+                <version>${mule.maven.plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <classifier>application</classifier>
                     <runtimeFabricDeployment>
-						<uri>${anypoint.uri}</uri>
-						<provider>${anypoint.provider}</provider>
-						<environment>${deployment.environment}</environment>
-						<target>${deployment.target}</target>
-						<muleVersion>${mule.version}</muleVersion>
-						<!-- <server>${maven.server}</server> -->
-						<applicationName>${app.name}</applicationName>
-						<username>${username}</username>
-			            <password>${password}</password>
-			            <properties>
-							<anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>					
-						</properties>
-						<deploymentSettings>
-							<replicationFactor>${deployment.replica}</replicationFactor>
-							<cpuReserved>${app.cores}</cpuReserved>
-							<memoryReserved>${app.memory}</memoryReserved>
-							<publicUrl>https://rtf.mulesoft.com/${name}</publicUrl>
-				  		</deploymentSettings>
-					</runtimeFabricDeployment>
-
-	            </configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.mule.tools.maven</groupId>
-				<artifactId>mule-app-maven-plugin</artifactId>
-				<version>${mule.tools.version}</version>
-				<!-- <extensions>true</extensions> -->
-				<configuration>
-					<copyToAppsDirectory>true</copyToAppsDirectory>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
-	<!-- Mule Dependencies -->
-	<dependencies>
-		<!-- Xml configuration -->
-		<dependency>
-        	<groupId>com.mulesoft.muleesb</groupId>
-			<artifactId>mule-core-ee</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- Xml configuration -->
-		<dependency>
-			<groupId>com.mulesoft.muleesb.modules</groupId>
-			<artifactId>mule-module-spring-config-ee</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- Mule Transports -->
-		<dependency>
-			<groupId>org.mule.transports</groupId>
-			<artifactId>mule-transport-file</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.transports</groupId>
-			<artifactId>mule-transport-http</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-        	<groupId>com.mulesoft.muleesb.transports</groupId>
-			<artifactId>mule-transport-jdbc-ee</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-        	<groupId>com.mulesoft.muleesb.transports</groupId>
-			<artifactId>mule-transport-jms-ee</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.transports</groupId>
-			<artifactId>mule-transport-vm</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- Mule Modules -->
-		<dependency>
-			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-module-scripting</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-module-xml</artifactId>
-			<version>${mule.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- for testing -->
-		<dependency>
-			<groupId>org.mule.tests</groupId>
-			<artifactId>mule-tests-functional</artifactId>
-			<version>${mule.version}</version>
-			<scope>test</scope>
-		</dependency>
-	<dependency>
+                        <uri>${anypoint.uri}</uri>
+                        <provider>${anypoint.provider}</provider>
+                        <environment>${deployment.environment}</environment>
+                        <target>${deployment.target}</target>
+                        <muleVersion>${mule.version}</muleVersion>
+                        <!-- <server>${maven.server}</server>-->
+                        <applicationName>${app.name}</applicationName>
+                        <username>${username}</username>
+                        <password>${password}</password>
+                        <properties>
+                            <anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
+                        </properties>
+                        <deploymentSettings>
+                            <replicationFactor>${deployment.replica}</replicationFactor>
+                            <cpuReserved>${app.cores}</cpuReserved>
+                            <memoryReserved>${app.memory}</memoryReserved>
+                            <publicUrl>https://rtf.mulesoft.com/${name}</publicUrl>
+                        </deploymentSettings>
+                    </runtimeFabricDeployment>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.mule.tools.maven</groupId>
+                <artifactId>mule-app-maven-plugin</artifactId>
+                <version>${mule.tools.version}</version>
+                <!-- <extensions>true</extensions>-->
+                <configuration>
+                    <copyToAppsDirectory>true</copyToAppsDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <!-- Mule Dependencies -->
+    <dependencies>
+        <!-- Xml configuration -->
+        <dependency>
+            <groupId>com.mulesoft.muleesb</groupId>
+            <artifactId>mule-core-ee</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Xml configuration -->
+        <dependency>
+            <groupId>com.mulesoft.muleesb.modules</groupId>
+            <artifactId>mule-module-spring-config-ee</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Mule Transports -->
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-file</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-http</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mulesoft.muleesb.transports</groupId>
+            <artifactId>mule-transport-jdbc-ee</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mulesoft.muleesb.transports</groupId>
+            <artifactId>mule-transport-jms-ee</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-vm</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Mule Modules -->
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-scripting</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-xml</artifactId>
+            <version>${mule.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- for testing -->
+        <dependency>
+            <groupId>org.mule.tests</groupId>
+            <artifactId>mule-tests-functional</artifactId>
+            <version>${mule.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-apikit</artifactId>
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-    <dependency>
+        <dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-http</artifactId>
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
-    <dependency>
+        <dependency>
             <groupId>com.mulesoft.weave</groupId>
             <artifactId>mule-plugin-weave</artifactId>
             <version>${mule.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
-	<repositories>
-          <repository>
+    <repositories>
+        <repository>
             <id>Central</id>
             <name>Central</name>
             <url>http://repo1.maven.org/maven2/</url>
@@ -193,17 +185,16 @@
             </snapshots>
         </pluginRepository>
         <pluginRepository>
-         <id>mule-public</id>
-         <url>https://repository.mulesoft.org/nexus/content/repositories/releases</url>
-      	</pluginRepository>
+            <id>mule-public</id>
+            <url>https://repository.mulesoft.org/nexus/content/repositories/releases</url>
+        </pluginRepository>
     </pluginRepositories>
     <distributionManagement>
-      <repository>
-         <id>Repository</id>
-         <name>Corporate Repository</name>
-         <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/b2ee7923-e6c7-4ca3-86a0-6304559b935d/maven/</url>
-         <layout>default</layout>
-      </repository>
-   </distributionManagement>
-
+        <repository>
+            <id>Repository</id>
+            <name>Corporate Repository</name>
+            <url>https://maven.anypoint.mulesoft.com/api/v1/organizations/b2ee7923-e6c7-4ca3-86a0-6304559b935d/maven/</url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
 </project>
