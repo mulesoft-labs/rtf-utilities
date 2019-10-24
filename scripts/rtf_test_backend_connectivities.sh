@@ -11,7 +11,7 @@ case "$CONTROL_PLANE" in
         CP_SUFFIX=""
         AMQP_EP="transport-layer.prod.cloudhub.io"
         HELM_EP="worker-cloud-helm-prod.s3.amazonaws.com"
-        EX_EP="exchange2-asset-manager-kprod.s3.amazonaws.com"
+        EX_EP="exchange2-asset-manager-kprod.s3.amazonaws.com configuration-resolver.prod.cloudhub.io analytics-ingest.anypoint.mulesoft.com"
         ECR_EP="ecr.us-east-1.amazonaws.com 494141260463.dkr.ecr.us-east-1.amazonaws.com"
         STARPORT_EP="prod-us-east-1-starport-layer-bucket.s3.amazonaws.com"
         LUMBERJACK_EP="dias-ingestor-nginx.prod.cloudhub.io"
@@ -103,8 +103,13 @@ else
 
     proto=$(echo $RTF_HTTP_PROXY | grep :// | sed -e's,^\(.*://\).*,\1,g')
     url="$(echo ${RTF_HTTP_PROXY/$proto/})"
-    creds=$(echo $url | grep @ | cut -d@ -f1)
-    proxy=$(echo $url | grep @ | cut -d@ -f2)
+    if [[ $url == *"@"* ]]; then 
+        creds=$(echo $url | grep @ | cut -d@ -f1)
+        proxy=$(echo $url | grep @ | cut -d@ -f2)
+    else
+        creds=""
+        proxy=$url
+    fi
 
     echo "HTTP/HTTPS PROXY: $RTF_HTTP_PROXY"
 
@@ -120,8 +125,13 @@ if [ -z $RTF_MONITORING_PROXY ]; then
 else
     proto=$(echo $RTF_MONITORING_PROXY | grep :// | sed -e's,^\(.*://\).*,\1,g')
     url=$(echo ${RTF_MONITORING_PROXY/$proto/})
-    creds=$(echo $url | grep @ | cut -d@ -f1)
-    proxy=$(echo $url | grep @ | cut -d@ -f2)
+    if [[ $url == *"@"* ]]; then 
+        creds=$(echo $url | grep @ | cut -d@ -f1)
+        proxy=$(echo $url | grep @ | cut -d@ -f2)
+    else
+        creds=""
+        proxy=$url
+    fi
 
     echo "SOCKS5 PROXY: $RTF_MONITORING_PROXY"
 
