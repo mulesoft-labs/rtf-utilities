@@ -40,7 +40,7 @@
                 <version>${mule.maven.plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <classifier>application</classifier>
+                    <classifier>mule-application</classifier>
                     <runtimeFabricDeployment>
                         <uri>${anypoint.uri}</uri>
                         <provider>${anypoint.provider}</provider>
