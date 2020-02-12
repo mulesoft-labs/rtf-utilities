@@ -16,9 +16,11 @@ api.ecr.us-east-1.amazonaws.com
 494141260463.dkr.ecr.us-east-1.amazonaws.com
 494141260463.dkr.ecr.eu-central-1.amazonaws.com
 prod-us-east-1-starport-layer-bucket.s3.amazonaws.com
+prod-us-east-1-starport-layer-bucket.s3.us-east-1.amazonaws.com
 prod-eu-central-1-starport-layer-bucket.s3.amazonaws.com
 prod-eu-central-1-starport-layer-bucket.s3.eu-central-1.amazonaws.com
 runtime-fabric.s3.amazonaws.com
 runtime-fabric-eu.s3.amazonaws.com
 .randomuser.me
 configuration-resolver.prod.cloudhub.io
+
