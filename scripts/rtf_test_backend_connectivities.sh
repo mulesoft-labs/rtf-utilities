@@ -10,18 +10,18 @@ case "$CONTROL_PLANE" in
     us*)
         CP_SUFFIX=""
         AMQP_EP="transport-layer.prod.cloudhub.io"
-        HELM_EP="worker-cloud-helm-prod.s3.amazonaws.com"
+        HELM_EP="worker-cloud-helm-prod.s3.amazonaws.com runtime-fabric.s3.amazonaws.com"
         EX_EP="exchange2-asset-manager-kprod.s3.amazonaws.com configuration-resolver.prod.cloudhub.io analytics-ingest.anypoint.mulesoft.com"
-        ECR_EP="ecr.us-east-1.amazonaws.com 494141260463.dkr.ecr.us-east-1.amazonaws.com"
-        STARPORT_EP="prod-us-east-1-starport-layer-bucket.s3.amazonaws.com"
+        ECR_EP="ecr.us-east-1.amazonaws.com 494141260463.dkr.ecr.us-east-1.amazonaws.com api.ecr.us-east-1.amazonaws.com" 
+        STARPORT_EP="prod-us-east-1-starport-layer-bucket.s3.amazonaws.com prod-us-east-1-starport-layer-bucket.s3.us-east-1.amazonaws.com"
         LUMBERJACK_EP="dias-ingestor-nginx.prod.cloudhub.io"
         ;;
     eu*)
         CP_SUFFIX="-eu"
         AMQP_EP="transport-layer.prod-eu.msap.io"
-        HELM_EP="worker-cloud-helm-prod-eu-rt.s3.amazonaws.com worker-cloud-helm-prod-eu-rt.s3.eu-central-1.amazonaws.com"
+        HELM_EP="worker-cloud-helm-prod-eu-rt.s3.amazonaws.com worker-cloud-helm-prod-eu-rt.s3.eu-central-1.amazonaws.com runtime-fabric-eu.s3.amazonaws.com"
         EX_EP="exchange2-asset-manager-kprod-eu.s3.amazonaws.com exchange2-asset-manager-kprod-eu.s3.eu-central-1.amazonaws.com"
-        ECR_EP="ecr.eu-central-1.amazonaws.com 494141260463.dkr.ecr.eu-central-1.amazonaws.com"
+        ECR_EP="ecr.eu-central-1.amazonaws.com 494141260463.dkr.ecr.eu-central-1.amazonaws.com api.ecr.eu-central-1.amazonaws.com"
         STARPORT_EP="prod-eu-central-1-starport-layer-bucket.s3.amazonaws.com prod-eu-central-1-starport-layer-bucket.s3.eu-central-1.amazonaws.com"
         LUMBERJACK_EP="dias-ingestor-nginx.prod-eu.msap.io"
 esac
