@@ -47,9 +47,9 @@ SUBNETS=$($GRAVITY_BASH "etcdctl ls /coreos.com/network/subnets/" | cut -d "/" -
 for SUBNET in $SUBNETS
 do
   if ip route | grep "$SUBNET" > /dev/null; then
-    echo -e "Route $SUBNET [${GREEN}Exists${NC}]"
+    echo -e "Route to $SUBNET [${GREEN}Exists${NC}]"
   else
-    echo -e "Route $SUBNET [${RED}Missing${NC}]"
+    echo -e "Route to $SUBNET [${RED}Missing${NC}]"
   fi
 done
 
