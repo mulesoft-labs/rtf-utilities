@@ -7,7 +7,7 @@ GREEN='\033[0;32m'
 JOB_NO=$(openssl rand -hex 3)
 
 sudo kubectl -n rtf create job --from=cronjob/registry-creds refresh-creds-$JOB_NO
-sudo kubectl wait -n rtf job/refresh-creds-$JOB_NO --for=condition=complete --timeout=60s 
+sudo kubectl wait -n rtf job/refresh-creds-$JOB_NO --for=condition=complete --timeout=120s 
 
 if [ "$?" == "0" ]; then
   echo -e "Job refresh-creds-$JOB_NO [${GREEN}completed${NC}]"
