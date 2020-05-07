@@ -4,7 +4,38 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 GREEN='\033[0;32m'
 
-GRAVITY_BASH="gravity planet enter -- --notty /usr/bin/bash -- -c"
+
+# https://stackoverflow.com/questions/4023830/how-to-compare-two-strings-in-dot-separated-version-format-in-bash
+vercomp () {
+    if [[ $1 == $2 ]]
+    then
+        return 0
+    fi
+    local IFS=.
+    local i ver1=($1) ver2=($2)
+    # fill empty fields in ver1 with zeros
+    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
+    do
+        ver1[i]=0
+    done
+    for ((i=0; i<${#ver1[@]}; i++))
+    do
+        if [[ -z ${ver2[i]} ]]
+        then
+            # fill empty fields in ver2 with zeros
+            ver2[i]=0
+        fi
+        if ((10#${ver1[i]} > 10#${ver2[i]}))
+        then
+            return 1
+        fi
+        if ((10#${ver1[i]} < 10#${ver2[i]}))
+        then
+            return 2
+        fi
+    done
+    return 0
+}
 
 function ping_test() {
   ping -c1 -W 2 $1 &>/dev/null
@@ -16,6 +47,17 @@ function ping_test() {
     return 1
   fi
 }
+
+# Set GRAVITY_BASH per gravity version
+GRAVITY_VERSION=$(gravity version | grep "^Version:" | awk '{ print $2 }')
+vercomp $GRAVITY_VERSION "5.5.40"
+if [[ $? == "1" ]]; then 
+  GRAVITY_BASH="gravity planet enter -- --notty /bin/bash -- -c"
+else
+  GRAVITY_BASH="gravity planet enter -- --notty /usr/bin/bash -- -c"
+fi
+
+
 
 CUR_IP=$(ip route get 1 | awk '{print $NF;exit}')
 
@@ -58,8 +100,8 @@ echo "Checking the MAC address"
 SUBNETS=$($GRAVITY_BASH "etcdctl ls /coreos.com/network/subnets/")
 for SUBNET in $SUBNETS
 do 
-  MAC=$($GRAVITY_BASH "etcdctl get $SUBNET" | jq -r ".BackendData.VtepMAC")
-  NODE_IP=$($GRAVITY_BASH "etcdctl get $SUBNET" |  jq -r ".PublicIP")
+  MAC=$($GRAVITY_BASH "etcdctl get $SUBNET | jq -r '.BackendData.VtepMAC'")
+  NODE_IP=$($GRAVITY_BASH "etcdctl get $SUBNET | jq -r '.PublicIP'")
   FLANNEL_IP=$(echo $SUBNET | cut -d "/" -f5 | cut -d "-" -f1)
 
   if [ $NODE_IP != $CUR_IP ]; then
