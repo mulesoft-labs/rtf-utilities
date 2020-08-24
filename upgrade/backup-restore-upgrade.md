@@ -284,7 +284,7 @@ deployment.extensions/agent scaled
 [root@ip-172-31-0-231 runtimefabric]# /opt/anypoint/runtimefabric/rtfctl restore /home/ec2-user/rtf-state.tar.gz
 ```
 
-This `PriorityClass1` is missing in the backup file. Create it manually. 
+The `PriorityClass` kind resource `rtf-components-high-priority` is missing in the backup file. Create it manually. 
 
 ```bash
 [root@ip-172-31-0-231 runtimefabric]# kubectl apply -f - << EOF

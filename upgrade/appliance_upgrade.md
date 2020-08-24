@@ -1,37 +1,5 @@
 # Appliance upgrade
 
-## Appliance upgrade process in general
-
-1. Preparation. Deploy agents, run prechecks and bootstrap
-2. Upgrade gravity on the leader node
-  * Stepdown the leader node. Make another node the leader
-  * Drain pods on the node
-  * Upgrade gravity
-  * taint
-  * uncordon
-  * endpoints
-  * untaint
-3. Elect the node in 2 to be a leader 
-4. Upgrade other nodes
-  * Drain pods
-  * Upgrade gravity
-  * taint
-  * uncordon
-  * endpoints
-  * untaint
-  * Enable leader election on a node if it's a controller
-5. Upgrade k8s Runtime components. Usually creates an upgrade pod to finish the upgrade 
-6. Config or ETCD upgrades
-7. Runtime-fabric app
-8. GC
-
-## Upgrade logs
-1. `/var/log/gravity-system` from the node where you run the upgrade records the most logs
-2. `/var/log/gravity-system` from the node where the phase is executed
-3. Outputs with `--debug` from the node where the plan is executed
-4. The component logs from the node where the plan is executed
-5. The logs from `<phase>-upgrade-xxx` pod if it's in the runtime upgrade phase
-
 ## What's behind `rtfctl appliance upgrade`
 
 The `rtfctl appliance upgrade` wraps up a couple of commands, for example. 
@@ -56,6 +24,15 @@ $ ./upload
 # upgrade
 $ ./gravity upgrade
 ```
+
+## Upgrade logs
+1. `/var/log/gravity-system` from the node where you run the upgrade records the most logs
+2. `/var/log/gravity-system` from the node where the phase is executed
+3. Outputs with `--debug` from the node where the plan is executed
+4. The component logs from the node where the plan is executed
+5. The logs from `<phase>-upgrade-xxx` pod if it's in the runtime upgrade phase
+  
+
 ## Upgrade process in details
 (from 1.1.1581474166-1f657f1 to 1.1.1583954392-3121bcd)
 
