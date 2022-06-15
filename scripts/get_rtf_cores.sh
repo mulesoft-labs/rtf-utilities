@@ -51,9 +51,10 @@ getCoreFromBGENV() {
 		APP_NAME=$(echo $APP_DEPLOYMENT | jq -r '.name')
 		APP_REQ_CPU=$(echo $APP_DEPLOYMENT | jq -r '.target.deploymentSettings.resources.cpu.reserved')
 		APP_LIM_CPU=$(echo $APP_DEPLOYMENT | jq -r '.target.deploymentSettings.resources.cpu.limit')
+		REPLICAS=$(echo $APP_DEPLOYMENT | jq -r '.target.replicas')
 
-		cpu_req_digits=${APP_REQ_CPU//[!0-9]/}
-		cpu_lim_digits=${APP_LIM_CPU//[!0-9]/}
+		cpu_req_digits=${APP_REQ_CPU//[!0-9]/}*$REPLICAS
+		cpu_lim_digits=${APP_LIM_CPU//[!0-9]/}*$REPLICAS
 
 		CPU_REQ_SUM=$(( $CPU_REQ_SUM + $cpu_req_digits))
 		CPU_LIM_SUM=$(( $CPU_LIM_SUM + $cpu_lim_digits))
@@ -103,7 +104,7 @@ done
 USERNAME=""
 PASSWORD=""
 
-if [ -z "$BEARER_TOKEN" ]
+if [[ ! -z "$BEARER_TOKEN" ]]
 then 
 	TOKEN=$BEARER_TOKEN
 else
