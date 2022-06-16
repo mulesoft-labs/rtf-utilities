@@ -24,12 +24,43 @@ SANDBOX_CPU_REQ=0
 SANDBOX_CPU_LIM=0
 
 
+RED='\033[0;31m' #RED
+NC='\033[0m' # No Color
+CURL_RESPONSE=""
+STATUS_CODE=""
+
+curl_func(){
+
+	url=$1
+	token=$2
+
+	STATUS_CODE=$(curl --write-out %{http_code} --silent --output /dev/null "$url" -H "Authorization: Bearer $token")
+
+  if [[ $STATUS_CODE != 200  ]] ; then
+    echo -e "${RED}Calling $url with token $token failed with $STATUS_CODE${NC}"
+    #exit 1
+  fi
+
+	CURL_RESPONSE=$(curl -sS $url -H "Authorization: Bearer $token")   # get all but the last line which contains the status code
+
+}
+
+
 getCoreFromBGENV() {
 	ORG_ID=$1
 	ENV_ID=$3
 	ENV_TYPE=$7
-	DEPLOYMENTS=$(curl -sS "https://anypoint.mulesoft.com/amc/application-manager/api/v2/organizations/${ORG_ID}/environments/${ENV_ID}/deployments" \
-   -H "Authorization: Bearer $TOKEN")
+	#DEPLOYMENTS=$(curl -sS "https://anypoint.mulesoft.com/amc/application-manager/api/v2/organizations/${ORG_ID}/environments/${ENV_ID}/deployments" \
+  #  -H "Authorization: Bearer $TOKEN")
+
+ 	curl_func "https://anypoint.mulesoft.com/amc/application-manager/api/v2/organizations/${ORG_ID}/environments/${ENV_ID}/deployments" $TOKEN
+ 	if [[ $STATUS_CODE != 200  ]] ; then
+ 		echo -e "No access to Org: $2 ($1), Env ID: $4 ($3), continue\n"
+ 		return 0
+  fi
+
+ 	DEPLOYMENTS=$CURL_RESPONSE
+
 	IDS=($(echo $DEPLOYMENTS | jq -r --arg APP_NAME "$APP_NAME" '.items | .[]? | select((.target.provider == "MC" and .application.status == "RUNNING")) | .id '))
 	RTF_IDS=($(echo $DEPLOYMENTS | jq -r --arg APP_NAME "$APP_NAME" '.items | .[]? | select((.target.provider == "MC" and .application.status == "RUNNING")) | .target.targetId'))
 
@@ -41,8 +72,11 @@ getCoreFromBGENV() {
 
 	for indexA in ${!IDS[@]};
 	do
-		APP_DEPLOYMENT=$(curl -sS "https://anypoint.mulesoft.com/amc/application-manager/api/v2/organizations/${ORG_ID}/environments/${ENV_ID}/deployments/${IDS[$indexA]}" \
-	  			-H "Authorization: Bearer $TOKEN")
+		# APP_DEPLOYMENT=$(curl -sS "https://anypoint.mulesoft.com/amc/application-manager/api/v2/organizations/${ORG_ID}/environments/${ENV_ID}/deployments/${IDS[$indexA]}" \
+	 #  			-H "Authorization: Bearer $TOKEN")
+	  curl_func "https://anypoint.mulesoft.com/amc/application-manager/api/v2/organizations/${ORG_ID}/environments/${ENV_ID}/deployments/${IDS[$indexA]}" $TOKEN
+		APP_DEPLOYMENT=$CURL_RESPONSE
+
 		TOTAL=$(echo $APP_DEPLOYMENT | jq -r '.total')
 		if [ $TOTAL == "0" ];
 		then
@@ -71,12 +105,12 @@ getCoreFromBGENV() {
 			SANDBOX_CPU_LIM=$(($SANDBOX_CPU_LIM + $CPU_LIM_SUM))
 		fi
 
-		a=`echo "scale=2 ; $CPU_REQ_SUM / 1000" | bc` && b=`echo "scale=2; $CPU_LIM_SUM/1000" | bc` && echo "App name: $APP_NAME, CPU Limit: $b, CPU Requests: $a" 
+		a=`echo "scale=2 ; $cpu_req_digits / 1000" | bc` && b=`echo "scale=2; $cpu_lim_digits/1000" | bc` && echo "App name: $APP_NAME, CPU Requests: $a, CPU Limit: $b" 
 		if [ -z "$FILENAME" ]
 		then
 			:		
 		else
-			a=`echo "scale=2 ; $CPU_REQ_SUM / 1000" | bc` && b=`echo "scale=2; $CPU_LIM_SUM/1000" | bc` && echo "$2,$1,$6,$5,$4,$3,$7,$APP_NAME,$b,$a,${RTF_IDS[$indexA]}" >> "$FILENAME"			
+			a=`echo "scale=2 ; $cpu_req_digits / 1000" | bc` && b=`echo "scale=2; $cpu_lim_digits/1000" | bc` && echo "$2,$1,$6,$5,$4,$3,$7,$APP_NAME,$b,$a,${RTF_IDS[$indexA]}" >> "$FILENAME"			
 		fi
 
 	done
@@ -108,8 +142,15 @@ if [[ ! -z "$BEARER_TOKEN" ]]
 then 
 	TOKEN=$BEARER_TOKEN
 else
-	TOKEN=$(curl -sS -X POST https://anypoint.mulesoft.com/accounts/login -H 'Content-Type: application/json' \
+	TOKEN=$(curl -sS  -X POST https://anypoint.mulesoft.com/accounts/login -H 'Content-Type: application/json' \
   -d '{"username": "'$USERNAME'","password": "'$PASSWORD'"}' | jq -r '.access_token')
+
+  if [[ 0 != $? ]]
+  	then
+  		echo -e "${RED}Cannot get the access token${NC}"
+  		exit 1
+  fi
+
 fi
 
 if [ -z "$FILENAME" ]
@@ -120,7 +161,10 @@ if [ -z "$FILENAME" ]
     echo "Org name, Org ID, Parent Org name, Parent Org ID, Environment name, Environment ID, Environment type, App name, CPU Limit, Reserved CPU, RTF ID" > $FILENAME
 fi 
 
-ORG_INFO=$(curl -sS -X GET https://anypoint.mulesoft.com/accounts/api/me -H "Authorization: Bearer $TOKEN")
+# ORG_INFO=$(curl -sS -X GET https://anypoint.mulesoft.com/accounts/api/me -H "Authorization: Bearer $TOKEN")
+curl_func "https://anypoint.mulesoft.com/accounts/api/me" $TOKEN
+ORG_INFO=$CURL_RESPONSE
+
 
 ORG_IDS=($(echo $ORG_INFO | jq -r '.user.memberOfOrganizations[].id'))
 
@@ -133,7 +177,9 @@ PARENT_NAMES=($(echo $ORG_INFO | jq -r '.user.memberOfOrganizations[].parentName
 
 for index in ${!ORG_IDS[@]};
 do 
-	ENV_INFO=$(curl -sS -X GET "https://anypoint.mulesoft.com/accounts/api/organizations/${ORG_IDS[$index]}/environments" -H "Authorization: Bearer $TOKEN")
+	#ENV_INFO=$(curl -sS -X GET "https://anypoint.mulesoft.com/accounts/api/organizations/${ORG_IDS[$index]}/environments" -H "Authorization: Bearer $TOKEN")
+	curl_func "https://anypoint.mulesoft.com/accounts/api/organizations/${ORG_IDS[$index]}/environments" $TOKEN
+	ENV_INFO=$CURL_RESPONSE
 	
 	ENV_IDS=($(echo $ENV_INFO | jq -r '.data[].id'))
 	ENV_NAMES=($(echo $ENV_INFO | jq -r '.data[].name'))
