@@ -23,6 +23,7 @@ PROD_CPU_LIM=0
 SANDBOX_CPU_REQ=0
 SANDBOX_CPU_LIM=0
 
+FILENAME=$(date +"%Y_%m_%d_%I_%M_%p").rtf_cpu_cores.txt
 
 RED='\033[0;31m' #RED
 NC='\033[0m' # No Color
@@ -50,6 +51,7 @@ getCoreFromBGENV() {
 	ORG_ID=$1
 	ENV_ID=$3
 	ENV_TYPE=$7
+
 	#DEPLOYMENTS=$(curl -sS "https://anypoint.mulesoft.com/amc/application-manager/api/v2/organizations/${ORG_ID}/environments/${ENV_ID}/deployments" \
   #  -H "Authorization: Bearer $TOKEN")
 
@@ -93,16 +95,16 @@ getCoreFromBGENV() {
 		CPU_REQ_SUM=$(( $CPU_REQ_SUM + $cpu_req_digits))
 		CPU_LIM_SUM=$(( $CPU_LIM_SUM + $cpu_lim_digits))
 
-		GLOBAL_CPU_REQ=$(($GLOBAL_CPU_REQ + $CPU_REQ_SUM))
-		GLOBAL_CPU_LIM=$(($GLOBAL_CPU_LIM + $CPU_LIM_SUM))
+		#GLOBAL_CPU_REQ=$(($GLOBAL_CPU_REQ + $CPU_REQ_SUM))
+		#GLOBAL_CPU_LIM=$(($GLOBAL_CPU_LIM + $CPU_LIM_SUM))
 
 		if [ $ENV_TYPE == "production" ];
 		then
-			PROD_CPU_REQ=$(($PROD_CPU_REQ + $CPU_REQ_SUM))
-			PROD_CPU_LIM=$(($PROD_CPU_LIM + $CPU_LIM_SUM))
+			PROD_CPU_REQ=$(($PROD_CPU_REQ + $cpu_req_digits))
+			PROD_CPU_LIM=$(($PROD_CPU_LIM + $cpu_lim_digits))
 		else
-			SANDBOX_CPU_REQ=$(($SANDBOX_CPU_REQ + $CPU_REQ_SUM))
-			SANDBOX_CPU_LIM=$(($SANDBOX_CPU_LIM + $CPU_LIM_SUM))
+			SANDBOX_CPU_REQ=$(($SANDBOX_CPU_REQ + $cpu_req_digits))
+			SANDBOX_CPU_LIM=$(($SANDBOX_CPU_LIM + $cpu_lim_digits))
 		fi
 
 		a=`echo "scale=2 ; $cpu_req_digits / 1000" | bc` && b=`echo "scale=2; $cpu_lim_digits/1000" | bc` && echo "App name: $APP_NAME, CPU Requests: $a, CPU Limit: $b" 
@@ -168,11 +170,14 @@ ORG_INFO=$CURL_RESPONSE
 
 ORG_IDS=($(echo $ORG_INFO | jq -r '.user.memberOfOrganizations[].id'))
 
-ORG_NAMES=($(echo $ORG_INFO | jq -r '.user.memberOfOrganizations[].name'))
+#ORG_NAMES=($(echo $ORG_INFO | jq -r '.user.memberOfOrganizations[].name'))
+
+declare -a "ORG_NAMES=($(echo $ORG_INFO | jq -r '.user.memberOfOrganizations[].name|@sh'))"
 
 PARENT_IDS=($(echo $ORG_INFO | jq -r '.user.memberOfOrganizations[].parentId'))
 
-PARENT_NAMES=($(echo $ORG_INFO | jq -r '.user.memberOfOrganizations[].parentName'))
+#PARENT_NAMES=($(echo $ORG_INFO | jq -r '.user.memberOfOrganizations[].parentName|@sh'))
+declare -a "PARENT_NAMES=($(echo $ORG_INFO | jq -r '.user.memberOfOrganizations[].parentName|@sh'))"
 
 
 for index in ${!ORG_IDS[@]};
@@ -183,11 +188,12 @@ do
 	
 	ENV_IDS=($(echo $ENV_INFO | jq -r '.data[].id'))
 	ENV_NAMES=($(echo $ENV_INFO | jq -r '.data[].name'))
+	#declare -a "ENV_NAMES=($(echo $ENV_INFO | jq -r '.data[].name|@sh'))"
 	ENV_TYPES=($(echo $ENV_INFO | jq -r '.data[].type'))
 	
 	for index2 in ${!ENV_IDS[@]}; 
 	do
-		getCoreFromBGENV ${ORG_IDS[$index]} ${ORG_NAMES[$index]} ${ENV_IDS[$index2]} ${ENV_NAMES[$index2]} ${PARENT_IDS[$index]} ${PARENT_NAMES[$index]} ${ENV_TYPES[$index2]};
+		getCoreFromBGENV "${ORG_IDS[$index]}" "${ORG_NAMES[$index]}" "${ENV_IDS[$index2]}" "${ENV_NAMES[$index2]}" "${PARENT_IDS[$index]}" "${PARENT_NAMES[$index]}" "${ENV_TYPES[$index2]}";
 	done
 done
 
