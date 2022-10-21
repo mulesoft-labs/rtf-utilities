@@ -86,8 +86,16 @@ getCoreFromBGENV() {
 		fi
 		APP_NAME=$(echo $APP_DEPLOYMENT | jq -r '.name')
 		APP_REQ_CPU=$(echo $APP_DEPLOYMENT | jq -r '.target.deploymentSettings.resources.cpu.reserved')
+
+		if [ $APP_REQ_CPU == "null" ];
+		then
+			continue
+		fi
+
 		APP_LIM_CPU=$(echo $APP_DEPLOYMENT | jq -r '.target.deploymentSettings.resources.cpu.limit')
 		REPLICAS=$(echo $APP_DEPLOYMENT | jq -r '.target.replicas')
+
+
 
 		cpu_req_digits=${APP_REQ_CPU//[!0-9]/}*$REPLICAS
 		cpu_lim_digits=${APP_LIM_CPU//[!0-9]/}*$REPLICAS
